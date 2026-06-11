@@ -1,2 +1,4 @@
-# CCNA-Labs
-Hands-on CCNA networking labs covering routing, switching, network services, and troubleshooting using Cisco Packet Tracer, EVE-NG, and Cisco CML.
+# CCNA Labs
+
+This repository contains hands-on networking labs completed while studying for the CCNA certification. The labs focus on routing, switching, network services, and troubleshooting using enterprise networking technologies.
+
