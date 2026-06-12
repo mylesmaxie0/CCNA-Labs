@@ -115,3 +115,11 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 - **100% success rate** confirms Layer 3 reachability across the simulated WAN link.
 
 ---
+
+## DHCP Server
+### What is a DHCP Server?
+###### A DHCP server dynamically provides IP configuration information to clients, eliminating the need for manual IP address assignment and reducing configuration errors.
+#
+
+#### Network Topology
+<img width="895" height="650" alt="Screenshot 2026-06-12 at 3 11 48 PM" src="https://github.com/user-attachments/assets/8022e42d-caa6-494c-829d-bfe88ca40171" />
