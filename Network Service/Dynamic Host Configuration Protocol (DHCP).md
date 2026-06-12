@@ -25,7 +25,7 @@
 ---
 
 ## DHCP Client
-#### What is a DHCP Client?
+### What is a DHCP Client?
 ###### A DHCP client is a device that automatically requests and receives IP configuration information from a DHCP server. This information typically includes an IP address, subnet mask, default gateway, and DNS servers, allowing the device to communicate on the network without manual configuration.
 #
 
@@ -34,7 +34,7 @@
 
 ## ISP & HQ-EDGE Router Configuration Walkthrough
 
-This document covers the initial WAN connectivity setup between a simulated ISP router and the HQ edge router. The goal is to bring up the WAN link, assign a public IP via DHCP, and verify end-to-end reachability.
+This covers the initial WAN connectivity setup between a simulated ISP router and the HQ edge router. The goal is to bring up the WAN link, assign a public IP via DHCP, and verify end-to-end reachability.
 
 #
 
