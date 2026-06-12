@@ -216,4 +216,9 @@ round-trip min/avg/max = 1.237/1.406/1.800 ms
 
 - PC1 successfully pings the LAN gateway at `192.168.1.1` with **0% packet loss**.
 - Consistent sub-2ms round-trip times confirm a Layer 3 connection between the PC and the HQ-EDGE router.
+---
+
+## DHCP Relay
+### What is a DHCP Relay?
+###### A DHCP relay enables clients on a different subnet than the DHCP server to obtain IP addresses by forwarding DHCP broadcast messages as unicast packets to the server.
 
