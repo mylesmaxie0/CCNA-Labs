@@ -183,6 +183,18 @@ udhcpc: lease of 192.168.1.12 obtained from 192.168.1.1, lease time 604800
 - The router responds from `192.168.1.1` and assigns `192.168.1.12` — the first available address outside the excluded range (`.1–.10`).
 - Lease time of `604800` seconds confirms the 7-day lease configured on the router.
 
+### Packet Capture Analysis — DORA Exchange
+<img width="1761" height="799" alt="Screenshot 2026-06-12 at 3 47 22 PM" src="https://github.com/user-attachments/assets/62200062-5133-4d0f-8aec-fc2a4cb3ac78" />
+
+The `.pcap` confirms all four DORA steps at the wire level. All frames share transaction ID `0x30138215` and originate from PC1 MAC `52:54:00:10:57:ea`.
+ 
+| Step | Direction | Key Details |
+|---|---|---|
+| **Discover** | `0.0.0.0` → `255.255.255.255` | Broadcast with no source IP |
+| **Offer** | `192.168.1.1` → `192.168.1.12` | Offers `192.168.1.12/24`, gateway `192.168.1.1`, DNS `8.8.8.8` |
+| **Request** | `0.0.0.0` → `255.255.255.255` | PC1 formally selects the offer; still broadcast so other servers can withdraw |
+| **Acknowledge** | `192.168.1.1` → `192.168.1.12` | Confirms 7-day lease |
+
 ---
 
 ## Gateway Connectivity Test
@@ -203,5 +215,5 @@ round-trip min/avg/max = 1.237/1.406/1.800 ms
 ```
 
 - PC1 successfully pings the LAN gateway at `192.168.1.1` with **0% packet loss**.
-- Consistent sub-2ms round-trip times confirm a healthy Layer 3 connection between the PC and the HQ-EDGE router.
+- Consistent sub-2ms round-trip times confirm a Layer 3 connection between the PC and the HQ-EDGE router.
 
