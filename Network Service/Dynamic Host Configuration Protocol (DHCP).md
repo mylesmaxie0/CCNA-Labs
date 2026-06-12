@@ -1,7 +1,5 @@
 ## What is Dynamic Host Configuration Protocol (DHCP)?
 
-##### This lab explores the implementation and operation of Dynamic Host Configuration Protocol (DHCP) within a Cisco networking environment. DHCP is a network management protocol that automatically assigns IP addresses and other network configuration parameters to devices, reducing the need for manual configuration.
-
 #### Topics Covered
 - DHCP Fundamentals and Purpose
 - DHCP Client
