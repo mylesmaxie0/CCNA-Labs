@@ -30,7 +30,7 @@
 #### Network Lab Topoogy
 <img width="971" height="524" alt="Screenshot 2026-06-12 at 12 23 25 PM" src="https://github.com/user-attachments/assets/ea5147e5-a8fe-4610-b847-db03fd4a5a95" />
 
-## ISP & HQ-EDGE Router Configuration Walkthrough
+## ISP & HQ-EDGE Router Configuration
 
 This covers the initial WAN connectivity setup between a simulated ISP router and the HQ edge router. The goal is to bring up the WAN link, assign a public IP via DHCP, and verify end-to-end reachability.
 
