@@ -223,5 +223,6 @@ round-trip min/avg/max = 1.237/1.406/1.800 ms
 ###### A DHCP relay enables clients on a different subnet than the DHCP server to obtain IP addresses by forwarding DHCP broadcast messages as unicast packets to the server.
 
 #### Network Topology
+<img width="1326" height="746" alt="image" src="https://github.com/user-attachments/assets/23b372ea-4f0f-4b51-b4c3-be14b5884937" />
 
 
