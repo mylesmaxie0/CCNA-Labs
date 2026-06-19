@@ -223,6 +223,128 @@ round-trip min/avg/max = 1.237/1.406/1.800 ms
 ###### A DHCP relay enables clients on a different subnet than the DHCP server to obtain IP addresses by forwarding DHCP broadcast messages as unicast packets to the server.
 
 #### Network Topology
-<img width="1326" height="746" alt="image" src="https://github.com/user-attachments/assets/23b372ea-4f0f-4b51-b4c3-be14b5884937" />
+<img width="1047" height="592" alt="Screenshot 2026-06-19 141050" src="https://github.com/user-attachments/assets/694f23da-2613-4ce8-b809-9a10fc23562b" />
 
+The HQ Office network consists of a Cisco ISR4331 edge router, a Cisco 2960-24TT access switch, a dedicated DHCP server, two PCs, and two printers — all segmented across three VLANs.
+ 
+---
+
+### DHCP Server Configuration
+<img width="927" height="167" alt="Screenshot 2026-06-19 141707" src="https://github.com/user-attachments/assets/55755914-7e69-4394-b1f8-9794f5736394" />
+The DHCP Server is assigned a static IP address rather than obtaining one via DHCP. As a network service device, a static address ensures clients and the router always reach it at a predictable, fixed address.
+
+---
+
+<img width="881" height="104" alt="Screenshot 2026-06-19 142420" src="https://github.com/user-attachments/assets/66818273-1044-4acb-b59f-ad95c9b569f2" />
+
+### VLAN DHCP Pool Configuration
+ 
+DHCP pools are configured on the DHCP Server for VLAN 1 (PCs) and VLAN 3 (Printers). VLAN 2 (Servers) is excluded — devices on that subnet use static IPs.
+ 
+| Pool | Default Gateway | DNS Server | Start IP | Subnet Mask | Max Users |
+|---|---|---|---|---|---|
+| VLAN1 | `192.168.1.1` | `8.8.8.8` | `192.168.1.10` | `255.255.255.0` | 243 |
+| VLAN3 | `192.168.3.1` | `8.8.8.8` | `192.168.3.10` | `255.255.255.0` | 243 |
+ 
+Each pool starts at `.10`, reserving `.1–.9` for static assignments. Max 243 users per pool covers the remaining `/24` address space.
+
+### Setting Up DHCP Relay on EDGE-RTR
+This covers the DHCP relay (`ip helper-address`) configuration on the HQ-EDGE-RTR, enabling VLAN 1 and VLAN 3 clients to reach the centralized DHCP server on VLAN 2.
+ 
+---
+ 
+## Configuration
+ 
+```
+HQ-EDGE-RTR(config)# interface g0/0/0.1
+HQ-EDGE-RTR(config-subif)# ip helper-address 192.168.2.2
+HQ-EDGE-RTR(config-subif)# exit
+HQ-EDGE-RTR(config)# interface g0/0/0.3
+HQ-EDGE-RTR(config-subif)# ip helper-address 192.168.2.2
+```
+ 
+## What This Does
+ 
+DHCP Discover messages are broadcasts — they don't cross router boundaries by default. `ip helper-address` tells the router to intercept those broadcasts on a sub-interface and forward them as unicast to the DHCP server at `192.168.2.2`.
+ 
+- **`g0/0/0.1` (VLAN 1 — PCs)** — relays DHCP requests from PCs to the DHCP server on VLAN 2.
+- **`g0/0/0.3` (VLAN 3 — Printers)** — relays DHCP requests from printers to the same DHCP server.
+- **VLAN 2 is excluded** — the DHCP server itself sits on VLAN 2 with a static IP, so no relay is needed there.
+ 
+### PC DHCP Verification — VLAN 1
+
+This document covers the DHCP address assignment for the Reception PC and Office PC on VLAN 1 (`192.168.1.0/24`).
+
+---
+
+## Reception PC
+
+### Before DHCP
+
+```
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: 0.0.0.0
+```
+
+- No IP address assigned yet — the PC has not yet requested one from the DHCP server.
+
+### After `ipconfig /renew`
+
+```
+C:\>ipconfig /renew
+
+   IP Address......................: 192.168.1.10
+   Subnet Mask.....................: 255.255.255.0
+   Default Gateway.................: 192.168.1.1
+   DNS Server......................: 8.8.8.8
+```
+
+- Assigned `192.168.1.10` — the first address available from the VLAN 1 pool (start IP `.10`).
+
+---
+
+## Office PC
+
+### Before DHCP
+
+```
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: 0.0.0.0
+```
+
+- Same state as the Reception PC — no IP assigned prior to renewal.
+
+### After `ipconfig /renew`
+
+```
+C:\>ipconfig /renew
+
+   IP Address......................: 192.168.1.12
+   Subnet Mask.....................: 255.255.255.0
+   Default Gateway.................: 192.168.1.1
+   DNS Server......................: 8.8.8.8
+```
+
+- Assigned `192.168.1.12` — the next available address after `.10` and `.11`.
+
+---
+
+## Summary
+
+Both PCs successfully obtained addresses via the DHCP relay through HQ-EDGE-RTR to the centralized DHCP server at `192.168.2.2`. Gateway and DNS settings match the VLAN 1 pool configuration.
+
+| Device | Assigned IP | Gateway | DNS |
+|---|---|---|---|
+| Reception PC | `192.168.1.10` | `192.168.1.1` | `8.8.8.8` |
+| Office PC | `192.168.1.12` | `192.168.1.1` | `8.8.8.8` |
 
