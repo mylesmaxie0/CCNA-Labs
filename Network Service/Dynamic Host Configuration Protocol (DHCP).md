@@ -1,12 +1,4 @@
-# What is Dynamic Host Configuration Protocol (DHCP)?
 
-#### Topics Covered
-- DHCP Fundamentals and Purpose
-- DHCP Client
-- DHCP Server
-- DHCP Relay
-
----
 
 ## How DHCP Automates IP Address Management
 
